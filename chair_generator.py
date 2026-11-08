@@ -456,9 +456,19 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
         self.main_lay.addLayout(self.form_lay)
 
+        # Create button
         self.create_btn = QtWidgets.QPushButton("Create")
 
-        self.main_lay.addWidget(self.create_btn)
+        # Reset button
+        self.reset_btn = QtWidgets.QPushButton("Reset")
+
+        # Button layout
+        self.button_lay = QtWidgets.QHBoxLayout()
+
+        self.button_lay.addWidget(self.create_btn)
+        self.button_lay.addWidget(self.reset_btn)
+
+        self.main_lay.addLayout(self.button_lay)
 
         self.setLayout(self.main_lay)
 
@@ -466,10 +476,52 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
     def create_connections(self):
         self.enablegrpname_cb.toggled.connect(self.toggle_grpname_le)
         self.create_btn.clicked.connect(self.create)
+        self.reset_btn.clicked.connect(self.reset_parameters)
 
     @QtCore.Slot()
     def toggle_grpname_le(self):
         self.grpname_le.setEnabled(self.enablegrpname_cb.isChecked())
+
+    @QtCore.Slot()
+    def reset_parameters(self):
+
+        # Restore original generator values
+        self.chair_generator = ChairGenerator()
+
+        # Reset seat parameters
+        self.seat_width_dspnbx.setValue(self.chair_generator.seat_width)
+        self.seat_depth_dspnbx.setValue(self.chair_generator.seat_depth)
+        self.seat_thickness_dspnbx.setValue(
+            self.chair_generator.seat_thickness
+        )
+
+        # Reset leg parameter
+        self.leg_width_dspnbx.setValue(self.chair_generator.leg_width)
+
+        # Reset cushion parameters
+        self.cushion_width_dspnbx.setValue(self.chair_generator.cushion_width)
+        self.cushion_depth_dspnbx.setValue(self.chair_generator.cushion_depth)
+        self.cushion_height_dspnbx.setValue(
+            self.chair_generator.cushion_thickness
+        )
+
+        # Reset backrest parameters
+        self.backrest_width_dspnbx.setValue(
+            self.chair_generator.backrest_width
+        )
+        self.backrest_height_dspnbx.setValue(
+            self.chair_generator.backrest_height
+        )
+
+        # Reset apron parameter
+        self.apron_vertical_position_dspnbx.setValue(
+            self.chair_generator.apron_vertical_position
+        )
+
+        # Reset group name
+        self.enablegrpname_cb.setChecked(False)
+        self.grpname_le.setText(self.chair_generator.grp_name)
+        self.grpname_le.setEnabled(False)
 
     @QtCore.Slot()
     def create(self):
