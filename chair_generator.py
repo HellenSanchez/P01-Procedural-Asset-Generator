@@ -343,6 +343,15 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.seat_width_dspnbx
         )
 
+        # Seat depth parameter
+        self.seat_depth_dspnbx = QtWidgets.QDoubleSpinBox()
+        self.seat_depth_dspnbx.setValue(2.0)
+
+        self.form_lay.addRow(
+            "Seat Depth",
+            self.seat_depth_dspnbx
+        )
+
         self.main_lay.addLayout(self.form_lay)
 
         self.create_btn = QtWidgets.QPushButton("Create")
@@ -359,5 +368,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
     def create(self):
 
         self.chair_generator.seat_width = self.seat_width_dspnbx.value()
+        self.chair_generator.seat_depth = self.seat_depth_dspnbx.value()
 
         self.chair_generator.create()
