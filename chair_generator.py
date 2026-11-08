@@ -23,12 +23,18 @@ class ChairGenerator():
         self.cushion_depth = 1.8
         self.cushion_thickness = 0.15
 
+        # Backrest parameters
+        self.backrest_width = 1.6
+        self.backrest_height = 1.2
+        self.backrest_thickness = 0.15
+
     # Main function to create the chair
     def create(self):
         self.create_seat()
         self.create_legs()
         self.create_seat_apron()
         self.create_seat_cushion()
+        self.create_backrest()
 
     # Create seat
     def create_seat(self):
@@ -227,6 +233,34 @@ class ChairGenerator():
             self.seat_thickness / 2.0 + self.cushion_thickness / 2.0
         )
 
-    # Create backrest
+    # Create chair backrest
+    def create_backrest(self):
+
+        self.backrest_obj, self.backrest_node = cmds.polyCube(
+            name="backrest",
+            width=self.backrest_width,
+            height=self.backrest_height,
+            depth=self.backrest_thickness
+        )
+
+        cmds.setAttr(
+            f"{self.backrest_obj}.translateX",
+            0
+        )
+
+        cmds.setAttr(
+            f"{self.backrest_obj}.translateY",
+            1.317
+        )
+
+        cmds.setAttr(
+            f"{self.backrest_obj}.translateZ",
+            -0.9
+        )
+
+        cmds.setAttr(
+            f"{self.backrest_obj}.scaleY",
+            0.712
+        )
 
     # Group all chair objects
