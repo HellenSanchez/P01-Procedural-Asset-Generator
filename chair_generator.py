@@ -17,11 +17,17 @@ class ChairGenerator():
         self.apron_height = 0.3
         self.apron_thickness = 0.15
 
+        # Seat cushion parameters
+        self.cushion_width = 1.8
+        self.cushion_depth = 1.8
+        self.cushion_thickness = 0.15
+
     # Main function to create the chair
     def create(self):
         self.create_seat()
         self.create_legs()
         self.create_seat_apron()
+        self.create_seat_cushion()
 
     # Create seat
     def create_seat(self):
@@ -205,6 +211,19 @@ class ChairGenerator():
         )
 
     # Create seat cushion
+    def create_seat_cushion(self):
+
+        self.cushion_obj, self.cushion_node = cmds.polyCube(
+            name="seat_cushion",
+            width=self.cushion_width,
+            height=self.cushion_thickness,
+            depth=self.cushion_depth
+        )
+
+        cmds.setAttr(
+            f"{self.cushion_obj}.translateY",
+            self.seat_thickness / 2.0 + self.cushion_thickness / 2.0
+        )
 
     # Create backrest
 
