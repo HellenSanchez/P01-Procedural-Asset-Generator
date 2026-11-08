@@ -20,7 +20,7 @@ class ChairGenerator():
         self.leg_width = 0.2
 
         # Seat apron parameters
-        self.apron_height = 0.3
+        self.apron_height = 0.19
         self.apron_thickness = 0.15
         self.apron_vertical_position = 0.0
 
@@ -564,7 +564,7 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
             self.restore_original_parameters()
 
-            self.apron_vertical_position_dspnbx.setValue(0.25)
+            self.apron_vertical_position_dspnbx.setValue(0.65)
 
         # Wide Chair (Bench Style)
         elif preset_name == "Wide Chair (Bench Style)":
