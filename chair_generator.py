@@ -528,7 +528,11 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
     # Enable group name field
     @QtCore.Slot(bool)
     def toggle_grpname_le(self, enabled):
+
         self.grpname_le.setEnabled(enabled)
+
+        if not enabled:
+            self.grpname_le.setText("chair_GRP")
 
     # Restore original chair parameters
     def restore_original_parameters(self):
