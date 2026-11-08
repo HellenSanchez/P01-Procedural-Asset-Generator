@@ -101,6 +101,29 @@ class ChairGenerator():
             -self.seat_depth / 2.0 + self.leg_width / 2.0
         )
 
+        # Back right leg
+        self.leg4, self.leg4_node = cmds.polyCube(
+            name="leg4",
+            width=self.leg_width,
+            height=self.leg_height,
+            depth=self.leg_width
+        )
+
+        cmds.setAttr(
+            f"{self.leg4}.translateY",
+            -self.leg_height / 2.0
+        )
+
+        cmds.setAttr(
+            f"{self.leg4}.translateX",
+            self.seat_width / 2.0 - self.leg_width / 2.0
+        )
+
+        cmds.setAttr(
+            f"{self.leg4}.translateZ",
+            -self.seat_depth / 2.0 + self.leg_width / 2.0
+        )
+
     # Create wooden seat apron (frame underneath the seat)
 
     # Create seat cushion
@@ -110,4 +133,3 @@ class ChairGenerator():
     # Create backrest supports
 
     # Group all chair objects
-    
