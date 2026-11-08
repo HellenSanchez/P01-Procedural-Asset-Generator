@@ -332,6 +332,19 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
     def create_layout(self):
         self.main_lay = QtWidgets.QVBoxLayout()
 
+        # Seat width parameter
+        self.form_lay = QtWidgets.QFormLayout()
+
+        self.seat_width_dspnbx = QtWidgets.QDoubleSpinBox()
+        self.seat_width_dspnbx.setValue(2.0)
+
+        self.form_lay.addRow(
+            "Seat Width",
+            self.seat_width_dspnbx
+        )
+
+        self.main_lay.addLayout(self.form_lay)
+
         self.create_btn = QtWidgets.QPushButton("Create")
 
         self.main_lay.addWidget(self.create_btn)
@@ -344,4 +357,7 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
     @QtCore.Slot()
     def create(self):
+
+        self.chair_generator.seat_width = self.seat_width_dspnbx.value()
+
         self.chair_generator.create()
