@@ -1,5 +1,10 @@
 import maya.cmds as cmds
 
+from PySide6 import QtWidgets, QtCore
+from shiboken6 import wrapInstance
+
+import maya.OpenMayaUI as omui
+
 
 class ChairGenerator():
 
@@ -302,3 +307,41 @@ class ChairGenerator():
             f"{self.backrest_obj}.scaleY",
             0.712
         )
+
+
+# Get Maya main window
+def get_main_maya_win():
+    main_win = omui.MQtUtil.mainWindow()
+    return wrapInstance(int(main_win), QtWidgets.QWidget)
+
+
+class ChairGeneratorGUI(QtWidgets.QDialog):
+
+    def __init__(self):
+        super().__init__(parent=get_main_maya_win())
+
+        self.chair_generator = ChairGenerator()
+
+        self.setWindowTitle("Chair Generator")
+        self.setWindowFlag(QtCore.Qt.WindowType.Tool)
+
+        self.create_layout()
+        self.create_connections()
+
+    # Create main GUI layout
+    def create_layout(self):
+        self.main_lay = QtWidgets.QVBoxLayout()
+
+        self.create_btn = QtWidgets.QPushButton("Create")
+
+        self.main_lay.addWidget(self.create_btn)
+
+        self.setLayout(self.main_lay)
+
+    # Connect GUI buttons
+    def create_connections(self):
+        self.create_btn.clicked.connect(self.create)
+
+    @QtCore.Slot()
+    def create(self):
+        self.chair_generator.create()
