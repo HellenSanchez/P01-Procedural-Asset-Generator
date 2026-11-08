@@ -168,6 +168,24 @@ class ChairGenerator():
             -self.seat_depth / 2.0 + self.apron_thickness / 2.0 + 0.02
         )
 
+        # Left apron
+        self.apron3, self.apron3_node = cmds.polyCube(
+            name="left_apron",
+            width=self.apron_thickness,
+            height=self.apron_height,
+            depth=self.seat_depth - self.leg_width * 2
+        )
+
+        cmds.setAttr(
+            f"{self.apron3}.translateY",
+            -self.seat_thickness / 2.0 - self.apron_height / 2.0
+        )
+
+        cmds.setAttr(
+            f"{self.apron3}.translateX",
+            -self.seat_width / 2.0 + self.apron_thickness / 2.0 + 0.02
+        )
+
     # Create seat cushion
 
     # Create backrest
