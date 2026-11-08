@@ -435,6 +435,25 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.apron_vertical_position_dspnbx
         )
 
+        # Enable custom group name
+        self.enablegrpname_cb = QtWidgets.QCheckBox()
+        self.enablegrpname_cb.setChecked(False)
+
+        self.form_lay.addRow(
+            "Enable Group Name",
+            self.enablegrpname_cb
+        )
+
+        # Group name
+        self.grpname_le = QtWidgets.QLineEdit()
+        self.grpname_le.setText(self.chair_generator.grp_name)
+        self.grpname_le.setEnabled(False)
+
+        self.form_lay.addRow(
+            "Group Name",
+            self.grpname_le
+        )
+
         self.main_lay.addLayout(self.form_lay)
 
         self.create_btn = QtWidgets.QPushButton("Create")
@@ -445,7 +464,12 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
     # Connect GUI buttons
     def create_connections(self):
+        self.enablegrpname_cb.toggled.connect(self.toggle_grpname_le)
         self.create_btn.clicked.connect(self.create)
+
+    @QtCore.Slot()
+    def toggle_grpname_le(self):
+        self.grpname_le.setEnabled(self.enablegrpname_cb.isChecked())
 
     @QtCore.Slot()
     def create(self):
@@ -476,5 +500,7 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
         self.chair_generator.apron_vertical_position = (
             self.apron_vertical_position_dspnbx.value()
         )
+
+        self.chair_generator.grp_name = self.grpname_le.text()
 
         self.chair_generator.create()
