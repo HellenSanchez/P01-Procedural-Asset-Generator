@@ -370,6 +370,15 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.leg_width_dspnbx
         )
 
+        # Backrest height parameter
+        self.backrest_height_dspnbx = QtWidgets.QDoubleSpinBox()
+        self.backrest_height_dspnbx.setValue(1.2)
+
+        self.form_lay.addRow(
+            "Backrest Height",
+            self.backrest_height_dspnbx
+        )
+
         self.main_lay.addLayout(self.form_lay)
 
         self.create_btn = QtWidgets.QPushButton("Create")
@@ -389,5 +398,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
         self.chair_generator.seat_depth = self.seat_depth_dspnbx.value()
         self.chair_generator.seat_thickness = self.seat_thickness_dspnbx.value()
         self.chair_generator.leg_width = self.leg_width_dspnbx.value()
+        self.chair_generator.backrest_height = self.backrest_height_dspnbx.value()
 
         self.chair_generator.create()
