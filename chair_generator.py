@@ -300,7 +300,7 @@ class ChairGenerator():
 
         cmds.setAttr(
             f"{self.backrest_obj}.translateZ",
-            -0.9
+            -self.seat_depth / 2.0 + self.leg_width / 2.0
         )
 
         cmds.setAttr(
