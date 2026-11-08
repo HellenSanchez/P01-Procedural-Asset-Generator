@@ -11,6 +11,7 @@ class ChairGenerator():
 
         # Leg parameters
         self.leg_height = 2.0
+        self.back_leg_height = 3.8
         self.leg_width = 0.2
 
         # Seat apron parameters
@@ -41,11 +42,12 @@ class ChairGenerator():
         return self.seat_obj
 
     # Create chair legs
+    # Back legs extend upward to serve as backrest supports
     def create_legs(self):
 
         # Front left leg
         self.leg1, self.leg1_node = cmds.polyCube(
-            name="leg1",
+            name="front_left_leg",
             width=self.leg_width,
             height=self.leg_height,
             depth=self.leg_width
@@ -68,7 +70,7 @@ class ChairGenerator():
 
         # Front right leg
         self.leg2, self.leg2_node = cmds.polyCube(
-            name="leg2",
+            name="front_right_leg",
             width=self.leg_width,
             height=self.leg_height,
             depth=self.leg_width
@@ -89,17 +91,17 @@ class ChairGenerator():
             self.seat_depth / 2.0 - self.leg_width / 2.0
         )
 
-        # Back left leg
+        # Back left leg (also serves as a backrest support)
         self.leg3, self.leg3_node = cmds.polyCube(
-            name="leg3",
+            name="back_left_leg_backrest_support",
             width=self.leg_width,
-            height=self.leg_height,
+            height=self.back_leg_height,
             depth=self.leg_width
         )
 
         cmds.setAttr(
             f"{self.leg3}.translateY",
-            -self.leg_height / 2.0
+            -self.leg_height + self.back_leg_height / 2.0
         )
 
         cmds.setAttr(
@@ -112,17 +114,17 @@ class ChairGenerator():
             -self.seat_depth / 2.0 + self.leg_width / 2.0
         )
 
-        # Back right leg
+        # Back right leg (also serves as a backrest support)
         self.leg4, self.leg4_node = cmds.polyCube(
-            name="leg4",
+            name="back_right_leg_backrest_support",
             width=self.leg_width,
-            height=self.leg_height,
+            height=self.back_leg_height,
             depth=self.leg_width
         )
 
         cmds.setAttr(
             f"{self.leg4}.translateY",
-            -self.leg_height / 2.0
+            -self.leg_height + self.back_leg_height / 2.0
         )
 
         cmds.setAttr(
@@ -226,7 +228,5 @@ class ChairGenerator():
         )
 
     # Create backrest
-
-    # Create backrest supports
 
     # Group all chair objects
