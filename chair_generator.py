@@ -34,6 +34,9 @@ class ChairGenerator():
         self.backrest_height = 1.2
         self.backrest_thickness = 0.15
 
+        # Extra option
+        self.is_bed = False
+
         self.grp_name = "chair_GRP"
 
     # Main function to create the chair
@@ -307,6 +310,8 @@ class ChairGenerator():
             1.317
         )
 
+        # Backrest position
+        # The bed uses the same position as the original chair
         cmds.setAttr(
             f"{self.backrest_obj}.translateZ",
             -self.seat_depth / 2.0 + self.leg_width / 2.0
@@ -341,9 +346,35 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
     def create_layout(self):
         self.main_lay = QtWidgets.QVBoxLayout()
 
-        # Seat width parameter
         self.form_lay = QtWidgets.QFormLayout()
 
+        # Enable chair presets
+        self.enablepreset_cb = QtWidgets.QCheckBox()
+        self.enablepreset_cb.setChecked(False)
+
+        self.form_lay.addRow(
+            "Enable Chair Presets",
+            self.enablepreset_cb
+        )
+
+        # Chair presets
+        self.preset_cb = QtWidgets.QComboBox()
+
+        self.preset_cb.addItems([
+            "Floating Apron Chair",
+            "Wide Chair (Bench Style)",
+            "Lounge Chair",
+            "Bed (Extra Option)"
+        ])
+
+        self.preset_cb.setEnabled(False)
+
+        self.form_lay.addRow(
+            "Chair Preset",
+            self.preset_cb
+        )
+
+        # Seat width parameter
         self.seat_width_dspnbx = QtWidgets.QDoubleSpinBox()
         self.seat_width_dspnbx.setValue(2.0)
 
@@ -474,60 +505,148 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
     # Connect GUI buttons
     def create_connections(self):
+        self.enablepreset_cb.toggled.connect(self.toggle_presets)
+        self.preset_cb.currentTextChanged.connect(self.apply_chair_preset)
+
         self.enablegrpname_cb.toggled.connect(self.toggle_grpname_le)
+
         self.create_btn.clicked.connect(self.create)
         self.reset_btn.clicked.connect(self.reset_parameters)
 
-    @QtCore.Slot()
-    def toggle_grpname_le(self):
-        self.grpname_le.setEnabled(self.enablegrpname_cb.isChecked())
+    # Enable or disable chair presets
+    @QtCore.Slot(bool)
+    def toggle_presets(self, enabled):
 
+        self.preset_cb.setEnabled(enabled)
+
+        if enabled:
+            self.apply_chair_preset(self.preset_cb.currentText())
+
+        else:
+            self.restore_original_parameters()
+
+    # Enable group name field
+    @QtCore.Slot(bool)
+    def toggle_grpname_le(self, enabled):
+        self.grpname_le.setEnabled(enabled)
+
+    # Restore original chair parameters
+    def restore_original_parameters(self):
+
+        self.chair_generator = ChairGenerator()
+
+        self.seat_width_dspnbx.setValue(2.0)
+        self.seat_depth_dspnbx.setValue(2.0)
+        self.seat_thickness_dspnbx.setValue(0.2)
+
+        self.leg_width_dspnbx.setValue(0.2)
+
+        self.cushion_width_dspnbx.setValue(1.8)
+        self.cushion_depth_dspnbx.setValue(1.8)
+        self.cushion_height_dspnbx.setValue(0.15)
+
+        self.backrest_width_dspnbx.setValue(1.6)
+        self.backrest_height_dspnbx.setValue(1.2)
+
+        self.apron_vertical_position_dspnbx.setValue(0.0)
+
+    # Apply selected chair preset
+    @QtCore.Slot(str)
+    def apply_chair_preset(self, preset_name):
+
+        if not self.enablepreset_cb.isChecked():
+            return
+
+        self.chair_generator.is_bed = False
+
+        # Floating Apron Chair
+        if preset_name == "Floating Apron Chair":
+
+            self.restore_original_parameters()
+
+            self.apron_vertical_position_dspnbx.setValue(0.25)
+
+        # Wide Chair (Bench Style)
+        elif preset_name == "Wide Chair (Bench Style)":
+
+            self.seat_width_dspnbx.setValue(4.5)
+            self.seat_depth_dspnbx.setValue(2.0)
+            self.seat_thickness_dspnbx.setValue(0.2)
+
+            self.leg_width_dspnbx.setValue(0.25)
+
+            self.cushion_width_dspnbx.setValue(4.3)
+            self.cushion_depth_dspnbx.setValue(1.8)
+            self.cushion_height_dspnbx.setValue(0.18)
+
+            self.backrest_width_dspnbx.setValue(4.1)
+            self.backrest_height_dspnbx.setValue(1.2)
+
+            self.apron_vertical_position_dspnbx.setValue(0.0)
+
+        # Lounge Chair
+        elif preset_name == "Lounge Chair":
+
+            self.seat_width_dspnbx.setValue(2.4)
+            self.seat_depth_dspnbx.setValue(2.8)
+            self.seat_thickness_dspnbx.setValue(0.2)
+
+            self.leg_width_dspnbx.setValue(0.2)
+
+            self.cushion_width_dspnbx.setValue(2.2)
+            self.cushion_depth_dspnbx.setValue(2.6)
+            self.cushion_height_dspnbx.setValue(0.25)
+
+            self.backrest_width_dspnbx.setValue(2.0)
+            self.backrest_height_dspnbx.setValue(1.5)
+
+            self.apron_vertical_position_dspnbx.setValue(0.0)
+
+        # Bed (Extra Option)
+        elif preset_name == "Bed (Extra Option)":
+
+            self.chair_generator.is_bed = True
+
+            self.seat_width_dspnbx.setValue(3.5)
+            self.seat_depth_dspnbx.setValue(6.0)
+            self.seat_thickness_dspnbx.setValue(0.25)
+
+            self.leg_width_dspnbx.setValue(0.3)
+
+            self.cushion_width_dspnbx.setValue(3.3)
+            self.cushion_depth_dspnbx.setValue(5.8)
+            self.cushion_height_dspnbx.setValue(0.3)
+
+            # Backrest width fits between the rear legs
+            self.backrest_width_dspnbx.setValue(2.9)
+            self.backrest_height_dspnbx.setValue(0.7)
+
+            self.apron_vertical_position_dspnbx.setValue(0.0)
+
+    # Reset all parameters
     @QtCore.Slot()
     def reset_parameters(self):
 
-        # Restore original generator values
-        self.chair_generator = ChairGenerator()
+        self.enablepreset_cb.setChecked(False)
 
-        # Reset seat parameters
-        self.seat_width_dspnbx.setValue(self.chair_generator.seat_width)
-        self.seat_depth_dspnbx.setValue(self.chair_generator.seat_depth)
-        self.seat_thickness_dspnbx.setValue(
-            self.chair_generator.seat_thickness
-        )
+        self.preset_cb.setCurrentIndex(0)
 
-        # Reset leg parameter
-        self.leg_width_dspnbx.setValue(self.chair_generator.leg_width)
+        self.preset_cb.setEnabled(False)
 
-        # Reset cushion parameters
-        self.cushion_width_dspnbx.setValue(self.chair_generator.cushion_width)
-        self.cushion_depth_dspnbx.setValue(self.chair_generator.cushion_depth)
-        self.cushion_height_dspnbx.setValue(
-            self.chair_generator.cushion_thickness
-        )
+        self.restore_original_parameters()
 
-        # Reset backrest parameters
-        self.backrest_width_dspnbx.setValue(
-            self.chair_generator.backrest_width
-        )
-        self.backrest_height_dspnbx.setValue(
-            self.chair_generator.backrest_height
-        )
-
-        # Reset apron parameter
-        self.apron_vertical_position_dspnbx.setValue(
-            self.chair_generator.apron_vertical_position
-        )
-
-        # Reset group name
         self.enablegrpname_cb.setChecked(False)
-        self.grpname_le.setText(self.chair_generator.grp_name)
+
+        self.grpname_le.setText("chair_GRP")
         self.grpname_le.setEnabled(False)
 
+    # Create chair
     @QtCore.Slot()
     def create(self):
 
         self.chair_generator.seat_width = self.seat_width_dspnbx.value()
         self.chair_generator.seat_depth = self.seat_depth_dspnbx.value()
+
         self.chair_generator.seat_thickness = (
             self.seat_thickness_dspnbx.value()
         )
@@ -536,6 +655,7 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
         self.chair_generator.cushion_width = self.cushion_width_dspnbx.value()
         self.chair_generator.cushion_depth = self.cushion_depth_dspnbx.value()
+
         self.chair_generator.cushion_thickness = (
             self.cushion_height_dspnbx.value()
         )
@@ -544,15 +664,29 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
         self.chair_generator.backrest_width = (
             self.backrest_width_dspnbx.value()
         )
+
         self.chair_generator.backrest_height = (
             self.backrest_height_dspnbx.value()
         )
+
+        # Bed backrest fits between the rear legs
+        if self.chair_generator.is_bed:
+
+            self.chair_generator.backrest_width = (
+                self.chair_generator.seat_width
+                - self.chair_generator.leg_width * 2
+            )
+
+            self.backrest_width_dspnbx.setValue(
+                self.chair_generator.backrest_width
+            )
 
         # Apron parameter
         self.chair_generator.apron_vertical_position = (
             self.apron_vertical_position_dspnbx.value()
         )
 
+        # Group name
         self.chair_generator.grp_name = self.grpname_le.text()
 
         self.chair_generator.create()
