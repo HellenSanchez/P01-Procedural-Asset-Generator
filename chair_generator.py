@@ -9,37 +9,30 @@ import maya.OpenMayaUI as omui
 class ChairGenerator():
 
     def __init__(self):
-        # Seat parameters
         self.seat_width = 2.0
         self.seat_depth = 2.0
         self.seat_thickness = 0.2
 
-        # Leg parameters
         self.leg_height = 2.0
         self.back_leg_height = 3.8
         self.leg_width = 0.2
 
-        # Seat apron parameters
         self.apron_height = 0.19
         self.apron_thickness = 0.15
         self.apron_vertical_position = 0.0
 
-        # Seat cushion parameters
         self.cushion_width = 1.8
         self.cushion_depth = 1.8
         self.cushion_thickness = 0.15
 
-        # Backrest parameters
         self.backrest_width = 1.6
         self.backrest_height = 1.2
         self.backrest_thickness = 0.15
 
-        # Extra option
         self.is_bed = False
 
         self.grp_name = "chair_GRP"
 
-    # Main function to create the chair
     def create(self):
 
         group_objs = []
@@ -75,7 +68,6 @@ class ChairGenerator():
             2.0
         )
 
-    # Create seat
     def create_seat(self):
         self.seat_obj, self.seat_node = cmds.polyCube(
             name="seat",
@@ -86,11 +78,8 @@ class ChairGenerator():
 
         return self.seat_obj
 
-    # Create chair legs
-    # Back legs extend upward to serve as backrest supports
     def create_legs(self):
 
-        # Front left leg
         self.leg1, self.leg1_node = cmds.polyCube(
             name="front_left_leg",
             width=self.leg_width,
@@ -113,7 +102,6 @@ class ChairGenerator():
             self.seat_depth / 2.0 - self.leg_width / 2.0
         )
 
-        # Front right leg
         self.leg2, self.leg2_node = cmds.polyCube(
             name="front_right_leg",
             width=self.leg_width,
@@ -136,7 +124,6 @@ class ChairGenerator():
             self.seat_depth / 2.0 - self.leg_width / 2.0
         )
 
-        # Back left leg (also serves as a backrest support)
         self.leg3, self.leg3_node = cmds.polyCube(
             name="back_left_leg_backrest_support",
             width=self.leg_width,
@@ -159,7 +146,6 @@ class ChairGenerator():
             -self.seat_depth / 2.0 + self.leg_width / 2.0
         )
 
-        # Back right leg (also serves as a backrest support)
         self.leg4, self.leg4_node = cmds.polyCube(
             name="back_right_leg_backrest_support",
             width=self.leg_width,
@@ -182,10 +168,8 @@ class ChairGenerator():
             -self.seat_depth / 2.0 + self.leg_width / 2.0
         )
 
-    # Create wooden seat apron
     def create_seat_apron(self):
 
-        # Front apron
         self.apron1, self.apron1_node = cmds.polyCube(
             name="front_apron",
             width=self.seat_width - self.leg_width * 2,
@@ -205,7 +189,6 @@ class ChairGenerator():
             self.seat_depth / 2.0 - self.apron_thickness / 2.0 - 0.02
         )
 
-        # Back apron
         self.apron2, self.apron2_node = cmds.polyCube(
             name="back_apron",
             width=self.seat_width - self.leg_width * 2,
@@ -225,7 +208,6 @@ class ChairGenerator():
             -self.seat_depth / 2.0 + self.apron_thickness / 2.0 + 0.02
         )
 
-        # Left apron
         self.apron3, self.apron3_node = cmds.polyCube(
             name="left_apron",
             width=self.apron_thickness,
@@ -245,7 +227,6 @@ class ChairGenerator():
             -self.seat_width / 2.0 + self.apron_thickness / 2.0 + 0.02
         )
 
-        # Right apron
         self.apron4, self.apron4_node = cmds.polyCube(
             name="right_apron",
             width=self.apron_thickness,
@@ -265,7 +246,6 @@ class ChairGenerator():
             self.seat_width / 2.0 - self.apron_thickness / 2.0 - 0.02
         )
 
-    # Create seat cushion
     def create_seat_cushion(self):
 
         self.cushion_obj, self.cushion_node = cmds.polyCube(
@@ -290,7 +270,6 @@ class ChairGenerator():
             0.966
         )
 
-    # Create chair backrest
     def create_backrest(self):
 
         self.backrest_obj, self.backrest_node = cmds.polyCube(
@@ -310,8 +289,6 @@ class ChairGenerator():
             1.317
         )
 
-        # Backrest position
-        # The bed uses the same position as the original chair
         cmds.setAttr(
             f"{self.backrest_obj}.translateZ",
             -self.seat_depth / 2.0 + self.leg_width / 2.0
@@ -323,7 +300,6 @@ class ChairGenerator():
         )
 
 
-# Get Maya main window
 def get_main_maya_win():
     main_win = omui.MQtUtil.mainWindow()
     return wrapInstance(int(main_win), QtWidgets.QWidget)
@@ -342,13 +318,11 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
         self.create_layout()
         self.create_connections()
 
-    # Create main GUI layout
     def create_layout(self):
         self.main_lay = QtWidgets.QVBoxLayout()
 
         self.form_lay = QtWidgets.QFormLayout()
 
-        # Enable chair presets
         self.enablepreset_cb = QtWidgets.QCheckBox()
         self.enablepreset_cb.setChecked(False)
 
@@ -357,7 +331,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.enablepreset_cb
         )
 
-        # Chair presets
         self.preset_cb = QtWidgets.QComboBox()
 
         self.preset_cb.addItems([
@@ -374,7 +347,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.preset_cb
         )
 
-        # Seat width parameter
         self.seat_width_dspnbx = QtWidgets.QDoubleSpinBox()
         self.seat_width_dspnbx.setValue(2.0)
 
@@ -383,7 +355,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.seat_width_dspnbx
         )
 
-        # Seat depth parameter
         self.seat_depth_dspnbx = QtWidgets.QDoubleSpinBox()
         self.seat_depth_dspnbx.setValue(2.0)
 
@@ -392,7 +363,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.seat_depth_dspnbx
         )
 
-        # Seat thickness parameter
         self.seat_thickness_dspnbx = QtWidgets.QDoubleSpinBox()
         self.seat_thickness_dspnbx.setValue(0.2)
 
@@ -401,7 +371,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.seat_thickness_dspnbx
         )
 
-        # Leg width parameter
         self.leg_width_dspnbx = QtWidgets.QDoubleSpinBox()
         self.leg_width_dspnbx.setValue(0.2)
 
@@ -410,7 +379,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.leg_width_dspnbx
         )
 
-        # Cushion width parameter
         self.cushion_width_dspnbx = QtWidgets.QDoubleSpinBox()
         self.cushion_width_dspnbx.setValue(1.8)
 
@@ -419,7 +387,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.cushion_width_dspnbx
         )
 
-        # Cushion depth parameter
         self.cushion_depth_dspnbx = QtWidgets.QDoubleSpinBox()
         self.cushion_depth_dspnbx.setValue(1.8)
 
@@ -428,7 +395,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.cushion_depth_dspnbx
         )
 
-        # Cushion height parameter
         self.cushion_height_dspnbx = QtWidgets.QDoubleSpinBox()
         self.cushion_height_dspnbx.setValue(0.15)
 
@@ -437,7 +403,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.cushion_height_dspnbx
         )
 
-        # Backrest width parameter
         self.backrest_width_dspnbx = QtWidgets.QDoubleSpinBox()
         self.backrest_width_dspnbx.setValue(1.6)
 
@@ -446,7 +411,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.backrest_width_dspnbx
         )
 
-        # Backrest height parameter
         self.backrest_height_dspnbx = QtWidgets.QDoubleSpinBox()
         self.backrest_height_dspnbx.setValue(1.2)
 
@@ -455,7 +419,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.backrest_height_dspnbx
         )
 
-        # Apron vertical position parameter
         self.apron_vertical_position_dspnbx = QtWidgets.QDoubleSpinBox()
         self.apron_vertical_position_dspnbx.setRange(-1.5, 1.5)
         self.apron_vertical_position_dspnbx.setSingleStep(0.1)
@@ -466,7 +429,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.apron_vertical_position_dspnbx
         )
 
-        # Enable custom group name
         self.enablegrpname_cb = QtWidgets.QCheckBox()
         self.enablegrpname_cb.setChecked(False)
 
@@ -475,7 +437,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.enablegrpname_cb
         )
 
-        # Group name
         self.grpname_le = QtWidgets.QLineEdit()
         self.grpname_le.setText(self.chair_generator.grp_name)
         self.grpname_le.setEnabled(False)
@@ -487,13 +448,10 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
         self.main_lay.addLayout(self.form_lay)
 
-        # Create button
         self.create_btn = QtWidgets.QPushButton("Create")
 
-        # Reset button
         self.reset_btn = QtWidgets.QPushButton("Reset")
 
-        # Button layout
         self.button_lay = QtWidgets.QHBoxLayout()
 
         self.button_lay.addWidget(self.create_btn)
@@ -503,7 +461,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
         self.setLayout(self.main_lay)
 
-    # Connect GUI buttons
     def create_connections(self):
         self.enablepreset_cb.toggled.connect(self.toggle_presets)
         self.preset_cb.currentTextChanged.connect(self.apply_chair_preset)
@@ -513,7 +470,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
         self.create_btn.clicked.connect(self.create)
         self.reset_btn.clicked.connect(self.reset_parameters)
 
-    # Enable or disable chair presets
     @QtCore.Slot(bool)
     def toggle_presets(self, enabled):
 
@@ -525,7 +481,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
         else:
             self.restore_original_parameters()
 
-    # Enable group name field
     @QtCore.Slot(bool)
     def toggle_grpname_le(self, enabled):
 
@@ -534,7 +489,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
         if not enabled:
             self.grpname_le.setText("chair_GRP")
 
-    # Restore original chair parameters
     def restore_original_parameters(self):
 
         self.chair_generator = ChairGenerator()
@@ -554,7 +508,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
         self.apron_vertical_position_dspnbx.setValue(0.0)
 
-    # Apply selected chair preset
     @QtCore.Slot(str)
     def apply_chair_preset(self, preset_name):
 
@@ -563,14 +516,12 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
         self.chair_generator.is_bed = False
 
-        # Floating Apron Chair
         if preset_name == "Floating Apron Chair":
 
             self.restore_original_parameters()
 
             self.apron_vertical_position_dspnbx.setValue(0.65)
 
-        # Wide Chair (Bench Style)
         elif preset_name == "Wide Chair (Bench Style)":
 
             self.seat_width_dspnbx.setValue(4.5)
@@ -588,7 +539,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
             self.apron_vertical_position_dspnbx.setValue(0.0)
 
-        # Lounge Chair
         elif preset_name == "Lounge Chair":
 
             self.seat_width_dspnbx.setValue(2.4)
@@ -606,7 +556,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
             self.apron_vertical_position_dspnbx.setValue(0.0)
 
-        # Bed (Extra Option)
         elif preset_name == "Bed (Extra Option)":
 
             self.chair_generator.is_bed = True
@@ -621,13 +570,11 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.cushion_depth_dspnbx.setValue(5.8)
             self.cushion_height_dspnbx.setValue(0.3)
 
-            # Backrest width fits between the rear legs
             self.backrest_width_dspnbx.setValue(2.9)
             self.backrest_height_dspnbx.setValue(0.7)
 
             self.apron_vertical_position_dspnbx.setValue(0.0)
 
-    # Reset all parameters
     @QtCore.Slot()
     def reset_parameters(self):
 
@@ -644,7 +591,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
         self.grpname_le.setText("chair_GRP")
         self.grpname_le.setEnabled(False)
 
-    # Create chair
     @QtCore.Slot()
     def create(self):
 
@@ -664,7 +610,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.cushion_height_dspnbx.value()
         )
 
-        # Backrest parameters
         self.chair_generator.backrest_width = (
             self.backrest_width_dspnbx.value()
         )
@@ -673,7 +618,6 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.backrest_height_dspnbx.value()
         )
 
-        # Bed backrest fits between the rear legs
         if self.chair_generator.is_bed:
 
             self.chair_generator.backrest_width = (
@@ -685,12 +629,10 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
                 self.chair_generator.backrest_width
             )
 
-        # Apron parameter
         self.chair_generator.apron_vertical_position = (
             self.apron_vertical_position_dspnbx.value()
         )
 
-        # Group name
         self.chair_generator.grp_name = self.grpname_le.text()
 
         self.chair_generator.create()
