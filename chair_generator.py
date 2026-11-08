@@ -22,6 +22,7 @@ class ChairGenerator():
         # Seat apron parameters
         self.apron_height = 0.3
         self.apron_thickness = 0.15
+        self.apron_vertical_position = 0.0
 
         # Seat cushion parameters
         self.cushion_width = 1.8
@@ -191,7 +192,9 @@ class ChairGenerator():
 
         cmds.setAttr(
             f"{self.apron1}.translateY",
-            -self.seat_thickness / 2.0 - self.apron_height / 2.0
+            -self.seat_thickness / 2.0
+            - self.apron_height / 2.0
+            - self.apron_vertical_position
         )
 
         cmds.setAttr(
@@ -209,7 +212,9 @@ class ChairGenerator():
 
         cmds.setAttr(
             f"{self.apron2}.translateY",
-            -self.seat_thickness / 2.0 - self.apron_height / 2.0
+            -self.seat_thickness / 2.0
+            - self.apron_height / 2.0
+            - self.apron_vertical_position
         )
 
         cmds.setAttr(
@@ -227,7 +232,9 @@ class ChairGenerator():
 
         cmds.setAttr(
             f"{self.apron3}.translateY",
-            -self.seat_thickness / 2.0 - self.apron_height / 2.0
+            -self.seat_thickness / 2.0
+            - self.apron_height / 2.0
+            - self.apron_vertical_position
         )
 
         cmds.setAttr(
@@ -245,7 +252,9 @@ class ChairGenerator():
 
         cmds.setAttr(
             f"{self.apron4}.translateY",
-            -self.seat_thickness / 2.0 - self.apron_height / 2.0
+            -self.seat_thickness / 2.0
+            - self.apron_height / 2.0
+            - self.apron_vertical_position
         )
 
         cmds.setAttr(
@@ -415,6 +424,17 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.backrest_height_dspnbx
         )
 
+        # Apron vertical position parameter
+        self.apron_vertical_position_dspnbx = QtWidgets.QDoubleSpinBox()
+        self.apron_vertical_position_dspnbx.setRange(-1.5, 1.5)
+        self.apron_vertical_position_dspnbx.setSingleStep(0.1)
+        self.apron_vertical_position_dspnbx.setValue(0.0)
+
+        self.form_lay.addRow(
+            "Apron Vertical Position",
+            self.apron_vertical_position_dspnbx
+        )
+
         self.main_lay.addLayout(self.form_lay)
 
         self.create_btn = QtWidgets.QPushButton("Create")
@@ -432,15 +452,29 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
 
         self.chair_generator.seat_width = self.seat_width_dspnbx.value()
         self.chair_generator.seat_depth = self.seat_depth_dspnbx.value()
-        self.chair_generator.seat_thickness = self.seat_thickness_dspnbx.value()
+        self.chair_generator.seat_thickness = (
+            self.seat_thickness_dspnbx.value()
+        )
+
         self.chair_generator.leg_width = self.leg_width_dspnbx.value()
 
         self.chair_generator.cushion_width = self.cushion_width_dspnbx.value()
         self.chair_generator.cushion_depth = self.cushion_depth_dspnbx.value()
-        self.chair_generator.cushion_thickness = self.cushion_height_dspnbx.value()
+        self.chair_generator.cushion_thickness = (
+            self.cushion_height_dspnbx.value()
+        )
 
         # Backrest parameters
-        self.chair_generator.backrest_width = self.backrest_width_dspnbx.value()
-        self.chair_generator.backrest_height = self.backrest_height_dspnbx.value()
+        self.chair_generator.backrest_width = (
+            self.backrest_width_dspnbx.value()
+        )
+        self.chair_generator.backrest_height = (
+            self.backrest_height_dspnbx.value()
+        )
+
+        # Apron parameter
+        self.chair_generator.apron_vertical_position = (
+            self.apron_vertical_position_dspnbx.value()
+        )
 
         self.chair_generator.create()
