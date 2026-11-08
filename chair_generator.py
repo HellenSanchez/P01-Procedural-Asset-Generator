@@ -260,7 +260,17 @@ class ChairGenerator():
 
         cmds.setAttr(
             f"{self.cushion_obj}.translateY",
-            self.seat_thickness / 2.0 + self.cushion_thickness / 2.0
+            0.175
+        )
+
+        cmds.setAttr(
+            f"{self.cushion_obj}.translateZ",
+            0.098
+        )
+
+        cmds.setAttr(
+            f"{self.cushion_obj}.scaleZ",
+            0.966
         )
 
     # Create chair backrest
