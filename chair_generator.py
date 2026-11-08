@@ -28,13 +28,43 @@ class ChairGenerator():
         self.backrest_height = 1.2
         self.backrest_thickness = 0.15
 
+        self.grp_name = "chair_GRP"
+
     # Main function to create the chair
     def create(self):
+
+        group_objs = []
+
         self.create_seat()
+        group_objs.append(self.seat_obj)
+
         self.create_legs()
+        group_objs.append(self.leg1)
+        group_objs.append(self.leg2)
+        group_objs.append(self.leg3)
+        group_objs.append(self.leg4)
+
         self.create_seat_apron()
+        group_objs.append(self.apron1)
+        group_objs.append(self.apron2)
+        group_objs.append(self.apron3)
+        group_objs.append(self.apron4)
+
         self.create_seat_cushion()
+        group_objs.append(self.cushion_obj)
+
         self.create_backrest()
+        group_objs.append(self.backrest_obj)
+
+        self.chair_grp = cmds.group(
+            group_objs,
+            name=self.grp_name
+        )
+
+        cmds.setAttr(
+            f"{self.chair_grp}.translateY",
+            2.0
+        )
 
     # Create seat
     def create_seat(self):
@@ -262,5 +292,3 @@ class ChairGenerator():
             f"{self.backrest_obj}.scaleY",
             0.712
         )
-
-    # Group all chair objects
