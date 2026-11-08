@@ -24,6 +24,7 @@ https://github.com/HellenSanchez/P01-Procedural-Asset-Generator.git
 2. Open Maya Script Editor.
 3. Select the Python tab and run the following commands:
 
+```python
 import chair_generator
 import importlib
 
@@ -31,6 +32,7 @@ importlib.reload(chair_generator)
 
 win = chair_generator.ChairGeneratorGUI()
 win.show()
+```
 
 # Additional Note
 
