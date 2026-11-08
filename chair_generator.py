@@ -370,22 +370,31 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
             self.leg_width_dspnbx
         )
 
-        # Backrest height parameter
-        self.backrest_height_dspnbx = QtWidgets.QDoubleSpinBox()
-        self.backrest_height_dspnbx.setValue(1.2)
+        # Cushion width parameter
+        self.cushion_width_dspnbx = QtWidgets.QDoubleSpinBox()
+        self.cushion_width_dspnbx.setValue(1.8)
 
         self.form_lay.addRow(
-            "Backrest Height",
-            self.backrest_height_dspnbx
+            "Cushion Width",
+            self.cushion_width_dspnbx
         )
 
-        # Backrest width parameter
-        self.backrest_width_dspnbx = QtWidgets.QDoubleSpinBox()
-        self.backrest_width_dspnbx.setValue(1.6)
+        # Cushion depth parameter
+        self.cushion_depth_dspnbx = QtWidgets.QDoubleSpinBox()
+        self.cushion_depth_dspnbx.setValue(1.8)
 
         self.form_lay.addRow(
-            "Backrest Width",
-            self.backrest_width_dspnbx
+            "Cushion Depth",
+            self.cushion_depth_dspnbx
+        )
+
+        # Cushion height parameter
+        self.cushion_height_dspnbx = QtWidgets.QDoubleSpinBox()
+        self.cushion_height_dspnbx.setValue(0.15)
+
+        self.form_lay.addRow(
+            "Cushion Height",
+            self.cushion_height_dspnbx
         )
 
         self.main_lay.addLayout(self.form_lay)
@@ -407,7 +416,9 @@ class ChairGeneratorGUI(QtWidgets.QDialog):
         self.chair_generator.seat_depth = self.seat_depth_dspnbx.value()
         self.chair_generator.seat_thickness = self.seat_thickness_dspnbx.value()
         self.chair_generator.leg_width = self.leg_width_dspnbx.value()
-        self.chair_generator.backrest_height = self.backrest_height_dspnbx.value()
-        self.chair_generator.backrest_width = self.backrest_width_dspnbx.value()
+
+        self.chair_generator.cushion_width = self.cushion_width_dspnbx.value()
+        self.chair_generator.cushion_depth = self.cushion_depth_dspnbx.value()
+        self.chair_generator.cushion_thickness = self.cushion_height_dspnbx.value()
 
         self.chair_generator.create()
